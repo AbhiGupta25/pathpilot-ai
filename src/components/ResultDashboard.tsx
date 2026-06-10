@@ -19,10 +19,23 @@ export function ResultDashboard({ result }: Props) {
 
   const roadmapText = [
     `Student type: ${result.studentType}`,
+    `Decision diagnosis: ${result.decisionDiagnosis}`,
     `Bottleneck: ${result.bottleneck}`,
     `Recommended path: ${result.recommendedPath}`,
     `Specialization: ${result.specialization || "Not applicable"}`,
     `Do this first: ${result.doThisFirst}`,
+    `Tradeoff advice: ${result.tradeoffAdvice}`,
+    "",
+    "Why this path fits:",
+    ...result.whyThisPath.map((item) => `- ${item}`),
+    "",
+    "Why not other paths:",
+    ...result.whyNotOtherPaths.map((item) => `- ${item.path}: ${item.reason}`),
+    "",
+    "Opportunity match:",
+    `Best fit: ${result.opportunityMatch.bestFit}`,
+    `Avoid: ${result.opportunityMatch.avoid}`,
+    `Rationale: ${result.opportunityMatch.rationale}`,
     "",
     "7-day plan:",
     ...result.sevenDayPlan.map((item) => `- ${item}`),
@@ -53,14 +66,19 @@ export function ResultDashboard({ result }: Props) {
           </div>
         </div>
 
-        <div className="mt-6 grid gap-4 md:grid-cols-2">
+        <div className="mt-6 rounded-2xl border border-indigo-100 bg-indigo-50 p-5">
+          <h3 className="font-semibold text-indigo-950">Next Move Diagnosis</h3>
+          <p className="mt-2 text-sm leading-6 text-indigo-950">{result.decisionDiagnosis}</p>
+        </div>
+
+        <div className="mt-4 grid gap-4 md:grid-cols-2">
           <div className="rounded-2xl bg-slate-50 p-5">
             <h3 className="font-semibold text-slate-950">Main bottleneck</h3>
             <p className="mt-2 text-sm leading-6 text-slate-700">{result.bottleneck}</p>
           </div>
-          <div className="rounded-2xl bg-indigo-50 p-5">
-            <h3 className="font-semibold text-indigo-950">Do this first</h3>
-            <p className="mt-2 text-sm leading-6 text-indigo-900">{result.doThisFirst}</p>
+          <div className="rounded-2xl bg-emerald-50 p-5">
+            <h3 className="font-semibold text-emerald-950">Do this first</h3>
+            <p className="mt-2 text-sm leading-6 text-emerald-900">{result.doThisFirst}</p>
           </div>
         </div>
 
@@ -77,11 +95,62 @@ export function ResultDashboard({ result }: Props) {
           onClick={copyRoadmap}
           className="mt-5 rounded-2xl border border-slate-300 px-5 py-3 font-medium text-slate-800 transition hover:bg-slate-50"
         >
-          Copy roadmap
+          Copy full roadmap
         </button>
       </div>
 
       <div className="grid gap-5 md:grid-cols-2">
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <h3 className="text-lg font-semibold text-slate-950">Why this path fits</h3>
+          <ul className="mt-4 space-y-3">
+            {result.whyThisPath.map((item) => (
+              <li key={item} className="rounded-xl bg-slate-50 p-3 text-sm leading-6 text-slate-700">
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <h3 className="text-lg font-semibold text-slate-950">Why not the other paths</h3>
+          <div className="mt-4 space-y-3">
+            {result.whyNotOtherPaths.map((item) => (
+              <div key={item.path} className="rounded-xl bg-slate-50 p-3">
+                <div className="text-sm font-semibold text-slate-950">{item.path}</div>
+                <p className="mt-1 text-sm leading-6 text-slate-700">{item.reason}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm md:col-span-2">
+          <h3 className="text-lg font-semibold text-slate-950">Opportunity match</h3>
+          <div className="mt-4 grid gap-4 md:grid-cols-3">
+            <div className="rounded-xl bg-emerald-50 p-4">
+              <div className="text-sm font-semibold text-emerald-950">Best fit</div>
+              <p className="mt-2 text-sm leading-6 text-emerald-900">{result.opportunityMatch.bestFit}</p>
+            </div>
+            <div className="rounded-xl bg-rose-50 p-4">
+              <div className="text-sm font-semibold text-rose-950">Avoid</div>
+              <p className="mt-2 text-sm leading-6 text-rose-900">{result.opportunityMatch.avoid}</p>
+            </div>
+            <div className="rounded-xl bg-slate-50 p-4">
+              <div className="text-sm font-semibold text-slate-950">Rationale</div>
+              <p className="mt-2 text-sm leading-6 text-slate-700">{result.opportunityMatch.rationale}</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <h3 className="text-lg font-semibold text-slate-950">Tradeoff recommendation</h3>
+          <p className="mt-3 text-sm leading-6 text-slate-700">{result.tradeoffAdvice}</p>
+        </div>
+
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <h3 className="text-lg font-semibold text-slate-950">Student chapter vs upskilling</h3>
+          <p className="mt-3 text-sm leading-6 text-slate-700">{result.studentChapterAdvice}</p>
+        </div>
+
         <RoadmapCard title="Opportunity strategy" items={result.opportunityStrategy} />
         <RoadmapCard title="Resume strategy" items={result.resumeStrategy} />
         <RoadmapCard title="7-day action plan" items={result.sevenDayPlan} />

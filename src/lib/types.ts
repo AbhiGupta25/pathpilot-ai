@@ -24,11 +24,28 @@ export type StudentProfile = {
   confusion: string;
 };
 
+export type WhyNotPath = {
+  path: string;
+  reason: string;
+};
+
+export type OpportunityMatch = {
+  bestFit: string;
+  avoid: string;
+  rationale: string;
+};
+
 export type PathPilotResult = {
   studentType: string;
   bottleneck: string;
+  decisionDiagnosis: string;
   recommendedPath: string;
   specialization?: string;
+  whyThisPath: string[];
+  whyNotOtherPaths: WhyNotPath[];
+  opportunityMatch: OpportunityMatch;
+  tradeoffAdvice: string;
+  studentChapterAdvice: string;
   opportunityStrategy: string[];
   resumeStrategy: string[];
   sevenDayPlan: string[];
