@@ -2,7 +2,10 @@
 
 import { useState } from "react";
 import { DemoPersonaSelector } from "@/components/DemoPersonaSelector";
+import { Footer } from "@/components/Footer";
 import { Hero } from "@/components/Hero";
+import { HowItWorks } from "@/components/HowItWorks";
+import { ProblemSolutionStrip } from "@/components/ProblemSolutionStrip";
 import { ResultDashboard } from "@/components/ResultDashboard";
 import { StudentProfileForm } from "@/components/StudentProfileForm";
 import { demoPersonas } from "@/lib/demoPersonas";
@@ -26,12 +29,20 @@ export default function Home() {
     <main className="min-h-screen bg-slate-100 px-4 py-6 md:px-8 md:py-10">
       <div className="mx-auto max-w-7xl space-y-6">
         <Hero />
-        <DemoPersonaSelector onSelect={selectPersona} />
+        <ProblemSolutionStrip />
+        <HowItWorks />
+        <div id="pathpilot-demo" className="scroll-mt-8">
+          <DemoPersonaSelector onSelect={selectPersona} />
+        </div>
 
-        <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
-          <StudentProfileForm profile={profile} setProfile={setProfile} onSubmit={generate} />
+        <div className="grid gap-6 lg:grid-cols-[0.88fr_1.12fr]">
+          <div className="lg:sticky lg:top-6 lg:self-start">
+            <StudentProfileForm profile={profile} setProfile={setProfile} onSubmit={generate} />
+          </div>
           <ResultDashboard result={result} />
         </div>
+
+        <Footer />
       </div>
     </main>
   );
