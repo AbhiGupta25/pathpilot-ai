@@ -54,3 +54,34 @@ export type PathPilotResult = {
   confidenceScore: number;
   reasoning: string;
 };
+
+export type DiscoveryProfile = {
+  name: string;
+  educationStage: EducationStage;
+  funMoment: string;
+  whatWereYouDoing: string;
+  peopleAskHelpWith: string;
+  loseTrackOfTime: string;
+  dislikeEvenIfGood: string;
+  proudMoment: string;
+  freeWeekendChoice: string;
+};
+
+export type ArchetypeScore = {
+  name: string;
+  score: number;
+  signal: string;
+};
+
+export type DiscoveryResult = {
+  headline: string;
+  pattern: string;
+  archetypeMix: ArchetypeScore[];
+  hiddenStrength: string;
+  whatThisSays: string[];
+  possibleDirections: string[];
+  experiments: string[];
+  avoidForNow: string[];
+  sevenDayClarityPlan: string[];
+  confidenceScore: number;
+};

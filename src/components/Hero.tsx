@@ -1,50 +1,50 @@
 ﻿export function Hero() {
   return (
-    <section className="relative overflow-hidden rounded-[2rem] border border-slate-800 bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 px-6 py-12 text-white shadow-2xl md:px-12 md:py-16">
-      <div className="absolute right-[-8rem] top-[-8rem] h-80 w-80 rounded-full bg-indigo-500/20 blur-3xl" />
-      <div className="absolute bottom-[-10rem] left-[-8rem] h-96 w-96 rounded-full bg-cyan-400/10 blur-3xl" />
+    <section className="relative overflow-hidden rounded-[2rem] border border-[#DDE7FF] bg-gradient-to-br from-white via-[#F7F3FF] to-[#EAF7FF] px-6 py-12 text-[#07111F] shadow-2xl shadow-blue-950/10 md:px-12 md:py-16">
+      <div className="absolute right-[-8rem] top-[-8rem] h-80 w-80 rounded-full bg-cyan-300/25 blur-3xl" />
+      <div className="absolute bottom-[-10rem] left-[-8rem] h-96 w-96 rounded-full bg-violet-300/25 blur-3xl" />
 
       <div className="relative max-w-5xl">
-        <div className="mb-5 inline-flex rounded-full border border-indigo-300/30 bg-white/10 px-4 py-2 text-sm text-indigo-50">
-          YCFxAI Hackathon Prototype · Student Decision Engine
+        <div className="mb-5 inline-flex rounded-full border border-violet-200 bg-white/80 px-4 py-2 text-sm font-medium text-violet-700 shadow-sm backdrop-blur">
+          Youth Code x AI · YCFxAI Challenge Submission
         </div>
 
-        <h1 className="max-w-4xl text-4xl font-bold tracking-tight md:text-6xl">
-          Turn student confusion into one clear next move.
+        <h1 className="max-w-4xl text-4xl font-bold tracking-tight text-slate-950 md:text-6xl">
+          Find your next move, even if you have no idea where to start.
         </h1>
 
-        <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-300">
-          PathPilot AI helps students choose a direction, specialization, opportunity strategy,
-          and action plan based on their stage, skills, goals, financial pressure, and real constraints.
+        <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-700">
+          PathPilot helps students discover patterns in their own stories, choose a direction,
+          and turn career confusion into a practical action plan.
         </p>
 
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">
           <a
-            href="#pathpilot-demo"
-            className="rounded-2xl bg-white px-6 py-3 text-center font-semibold text-slate-950 transition hover:bg-indigo-50"
+            href="#mode-selector"
+            className="rounded-2xl bg-violet-600 px-6 py-3 text-center font-semibold text-white shadow-lg shadow-violet-200 transition hover:-translate-y-0.5 hover:bg-violet-700"
           >
-            Try the demo
+            Start with “I’m confused”
           </a>
           <a
-            href="#how-it-works"
-            className="rounded-2xl border border-white/20 bg-white/10 px-6 py-3 text-center font-semibold text-white transition hover:bg-white/15"
+            href="#mode-selector"
+            className="rounded-2xl border border-slate-200 bg-white px-6 py-3 text-center font-semibold text-slate-900 shadow-sm transition hover:bg-slate-50"
           >
-            See how it works
+            I already know my goal
           </a>
         </div>
 
-        <div className="mt-10 grid gap-3 text-sm text-slate-200 md:grid-cols-3">
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur">
-            <div className="font-semibold text-white">Career clarity</div>
-            <p className="mt-2 text-slate-300">For younger students unsure what path fits them.</p>
+        <div className="mt-10 grid gap-3 text-sm md:grid-cols-3">
+          <div className="rounded-2xl border border-[#DDE7FF] bg-white/85 p-4 shadow-sm backdrop-blur">
+            <div className="font-semibold text-slate-950">Discovery first</div>
+            <p className="mt-2 text-slate-600">For students who cannot name their interests or skills yet.</p>
           </div>
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur">
-            <div className="font-semibold text-white">Specialization strategy</div>
-            <p className="mt-2 text-slate-300">For college students choosing between fields like AI, cyber, web, and data.</p>
+          <div className="rounded-2xl border border-[#DDE7FF] bg-white/85 p-4 shadow-sm backdrop-blur">
+            <div className="font-semibold text-slate-950">Useful archetypes</div>
+            <p className="mt-2 text-slate-600">Builder, Investigator, Helper, Creator, Strategist, and more.</p>
           </div>
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur">
-            <div className="font-semibold text-white">Opportunity planning</div>
-            <p className="mt-2 text-slate-300">For students who need experience, proof, internships, hackathons, or income.</p>
+          <div className="rounded-2xl border border-[#DDE7FF] bg-white/85 p-4 shadow-sm backdrop-blur">
+            <div className="font-semibold text-slate-950">Next-step planning</div>
+            <p className="mt-2 text-slate-600">Career directions, experiments, opportunities, and action plans.</p>
           </div>
         </div>
       </div>

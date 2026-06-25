@@ -15,9 +15,9 @@
 
 export function HowItWorks() {
   return (
-    <section id="how-it-works" className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+    <section id="how-it-works" className="rounded-3xl border border-[#DDE7FF] bg-white p-6 shadow-xl shadow-blue-950/5">
       <div className="mb-6">
-        <div className="mb-3 text-sm font-semibold uppercase tracking-wide text-indigo-600">
+        <div className="mb-3 text-sm font-semibold uppercase tracking-wide text-violet-700">
           How PathPilot works
         </div>
         <h2 className="text-2xl font-bold text-slate-950">
@@ -30,8 +30,14 @@ export function HowItWorks() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-3">
-        {steps.map((step) => (
-          <div key={step.title} className="rounded-2xl bg-slate-50 p-5">
+        {steps.map((step, index) => (
+          <div
+            key={step.title}
+            className="rounded-2xl border border-[#DDE7FF] bg-[#F8FBFF] p-5 shadow-sm"
+          >
+            <div className="mb-4 flex h-9 w-9 items-center justify-center rounded-full bg-violet-600 text-sm font-bold text-white shadow-md shadow-violet-200">
+              {index + 1}
+            </div>
             <h3 className="font-semibold text-slate-950">{step.title}</h3>
             <p className="mt-3 text-sm leading-6 text-slate-700">{step.body}</p>
           </div>
