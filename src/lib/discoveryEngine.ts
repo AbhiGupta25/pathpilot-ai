@@ -4,42 +4,42 @@ const archetypes = [
   {
     name: "The Builder",
     keywords: ["build", "built", "make", "made", "create", "created", "app", "website", "project", "prototype", "code", "fix"],
-    signal: "You seem to enjoy turning ideas into something real.",
+    signal: "You like turning ideas into something real that other people can actually use.",
   },
   {
     name: "The Investigator",
     keywords: ["why", "research", "science", "data", "analyze", "experiment", "understand", "question", "study", "observe"],
-    signal: "You seem to enjoy figuring out why things work.",
+    signal: "You chase the why behind things and enjoy figuring out what is really going on.",
   },
   {
     name: "The Explainer",
     keywords: ["explain", "teach", "presentation", "present", "simplify", "write", "helped understand", "debate", "story"],
-    signal: "You seem to enjoy making ideas easier for other people to understand.",
+    signal: "You can turn confusing ideas into something other people can finally understand.",
   },
   {
     name: "The Helper",
     keywords: ["help", "people", "friend", "support", "community", "care", "problem", "listen", "guide"],
-    signal: "You seem to notice what people need and enjoy making things easier for them.",
+    signal: "You notice what people need and enjoy making things easier, calmer, or more accessible.",
   },
   {
     name: "The Strategist",
     keywords: ["business", "money", "competition", "win", "market", "growth", "plan", "strategy", "sell", "startup"],
-    signal: "You seem to enjoy decisions, tradeoffs, competition, and outcomes.",
+    signal: "You think in moves, tradeoffs, outcomes, and what gives you an edge.",
   },
   {
     name: "The Creator",
     keywords: ["design", "art", "video", "music", "content", "canva", "draw", "edit", "writing", "creative", "aesthetic"],
-    signal: "You seem to enjoy expression, visuals, storytelling, or making things feel alive.",
+    signal: "You care about expression, visuals, storytelling, and making things feel alive.",
   },
   {
     name: "The Organizer",
     keywords: ["organize", "event", "schedule", "manage", "team", "coordinate", "lead", "structure", "planner"],
-    signal: "You seem to enjoy bringing order to messy situations.",
+    signal: "You bring order to messy situations and make people, tasks, or ideas work together.",
   },
   {
     name: "The Tinkerer",
     keywords: ["try", "tool", "tools", "fix", "broken", "repair", "experiment", "hardware", "test", "mess around"],
-    signal: "You seem to learn by trying, testing, and adjusting things hands-on.",
+    signal: "You learn by touching the thing, testing it, breaking it, fixing it, and trying again.",
   },
 ];
 
@@ -112,6 +112,20 @@ function getDirections(names: string[]) {
   return ["Career exploration", "Student projects", "Beginner hackathons", "Skill discovery experiments"];
 }
 
+function getComboName(primary: string, secondary: string) {
+  const cleanPrimary = primary.replace("The ", "");
+  const cleanSecondary = secondary.replace("The ", "");
+
+  if (primary === "The Explainer" && secondary === "The Builder") return "The Idea Translator";
+  if (primary === "The Builder" && secondary === "The Helper") return "The Human-Centered Builder";
+  if (primary === "The Investigator" && secondary === "The Builder") return "The Lab-Maker";
+  if (primary === "The Creator" && secondary === "The Strategist") return "The Creative Operator";
+  if (primary === "The Organizer" && secondary === "The Strategist") return "The Systems Planner";
+  if (primary === "The Helper" && secondary === "The Explainer") return "The Support Guide";
+
+  return `${cleanPrimary} + ${cleanSecondary}`;
+}
+
 export function analyzeDiscoveryProfile(profile: DiscoveryProfile): DiscoveryResult {
   const text = Object.values(profile).join(" ").toLowerCase();
 
@@ -128,17 +142,17 @@ export function analyzeDiscoveryProfile(profile: DiscoveryProfile): DiscoveryRes
       {
         name: "The Explorer",
         score: 3,
-        signal: "You may not have clear patterns yet, which is normal. The next move is to test small interests instead of forcing one answer.",
+        signal: "Your pattern is still forming. That is not a flaw — it means you need small experiments, not pressure.",
       },
       {
         name: "The Builder",
         score: 2,
-        signal: "Even without clear skills, you can learn a lot by making small things and seeing what feels interesting.",
+        signal: "You may learn best by making small things and seeing what actually feels interesting.",
       },
       {
         name: "The Helper",
         score: 1,
-        signal: "Your answers suggest that people-facing problems may be worth testing.",
+        signal: "People-facing problems may be worth testing because they can reveal what you care about.",
       },
     ];
   }
@@ -147,28 +161,31 @@ export function analyzeDiscoveryProfile(profile: DiscoveryProfile): DiscoveryRes
   const names = top.map((item) => item.name);
   const primary = top[0];
   const secondary = top[1];
+  const comboName = getComboName(primary.name, secondary.name);
 
   const possibleDirections = getDirections(names);
 
   const headline =
     primary.name === "The Explorer"
-      ? "Your pattern is still forming — and that is useful information."
-      : `You may be ${primary.name.replace("The ", "a ")} with a strong ${secondary.name.replace("The ", "").toLowerCase()} streak.`;
+      ? "Your pattern is still forming — and that is useful data."
+      : `Your current signal looks like: ${comboName}.`;
 
   const pattern =
     primary.name === "The Explorer"
-      ? "Right now, PathPilot sees uncertainty rather than one obvious path. That does not mean you are behind. It means your best move is to run small experiments and collect evidence about what actually holds your attention."
-      : `Your answers suggest that you are drawn to ${primary.signal.toLowerCase()} You may also show signs of ${secondary.signal.toLowerCase()}`;
+      ? "PathPilot is not seeing one loud signal yet. That does not mean you are behind. It means your next step is to collect better evidence through small, low-pressure experiments."
+      : `The strongest clue is ${primary.name}: ${primary.signal} There is also a secondary clue from ${secondary.name}: ${secondary.signal}`;
 
   const hiddenStrength =
     primary.name === "The Builder"
-      ? "You may not think of yourself as skilled yet, but you seem to learn by making things tangible."
+      ? "You may not think of yourself as skilled yet, but your instinct is to make ideas tangible. That is a real advantage."
       : primary.name === "The Explainer"
-      ? "You may be underestimating your ability to turn confusing ideas into something other people can follow."
+      ? "You may be underestimating how valuable it is to make confusing things feel simple. That can become teaching, content, research, UX, product, or leadership."
       : primary.name === "The Helper"
-      ? "You may be good at spotting human problems before other people can name them."
+      ? "You may be good at spotting human problems before other people can name them. That is the root of strong social-impact and design work."
       : primary.name === "The Investigator"
-      ? "You may be strongest when you are allowed to ask better questions instead of memorizing answers."
+      ? "You may be strongest when you are allowed to ask better questions instead of memorizing answers. That points toward research, data, science, or analysis."
+      : primary.name === "The Creator"
+      ? "You may understand attention, feeling, and presentation better than you realize. That matters in design, media, branding, and creator tools."
       : "Your useful signal is not a fixed career label yet. It is the kind of situations that make you curious enough to keep going.";
 
   return {
