@@ -1,6 +1,6 @@
-﻿"use client";
+"use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { DemoPersonaSelector } from "@/components/DemoPersonaSelector";
 import { DiscoveryDashboard } from "@/components/DiscoveryDashboard";
 import { DiscoveryForm } from "@/components/DiscoveryForm";
@@ -17,6 +17,7 @@ import { generateRecommendation } from "@/lib/recommendationEngine";
 import { DiscoveryProfile, DiscoveryResult, PathPilotResult, StudentProfile } from "@/lib/types";
 
 type Mode = "discovery" | "strategy";
+type PersonalizationStatus = "idle" | "loading" | "applied" | "fallback";
 
 const sampleDiscoveryProfile: DiscoveryProfile = {
   name: "Sam",
@@ -37,26 +38,122 @@ const sampleDiscoveryProfile: DiscoveryProfile = {
     "I would make a study guide website or a short video that helps students understand difficult topics.",
 };
 
+function StatusBanner({ status }: { status: PersonalizationStatus }) {
+  if (status === "idle") {
+    return null;
+  }
+
+  const label =
+    status === "loading"
+      ? "Personalizing with AI..."
+      : status === "applied"
+        ? "AI personalization applied."
+        : "Using stable rules-based result.";
+
+  const styles =
+    status === "loading"
+      ? "border-violet-200 bg-violet-50 text-violet-800"
+      : status === "applied"
+        ? "border-emerald-200 bg-emerald-50 text-emerald-800"
+        : "border-slate-200 bg-slate-50 text-slate-700";
+
+  return <div className={`rounded-2xl border px-4 py-3 text-sm font-medium shadow-sm ${styles}`}>{label}</div>;
+}
+
 export default function Home() {
   const [mode, setMode] = useState<Mode>("discovery");
 
   const [profile, setProfile] = useState<StudentProfile>(demoPersonas[1]);
   const [result, setResult] = useState<PathPilotResult | null>(null);
+  const [strategyStatus, setStrategyStatus] = useState<PersonalizationStatus>("idle");
 
   const [discoveryProfile, setDiscoveryProfile] = useState<DiscoveryProfile>(sampleDiscoveryProfile);
   const [discoveryResult, setDiscoveryResult] = useState<DiscoveryResult | null>(null);
+  const [discoveryStatus, setDiscoveryStatus] = useState<PersonalizationStatus>("idle");
+
+  const strategyRequestIdRef = useRef(0);
+  const discoveryRequestIdRef = useRef(0);
+
+  async function personalizeResult<T extends DiscoveryResult | PathPilotResult>(
+    nextMode: Mode,
+    profileData: DiscoveryProfile | StudentProfile,
+    baseResult: T
+  ): Promise<{ result: T; usedAI: boolean }> {
+    const response = await fetch("/api/personalize", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        mode: nextMode,
+        profile: profileData,
+        result: baseResult,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Personalization request failed.");
+    }
+
+    return (await response.json()) as { result: T; usedAI: boolean };
+  }
 
   function selectPersona(persona: StudentProfile) {
     setProfile(persona);
-    setResult(generateRecommendation(persona));
+    void generateStrategy(persona);
   }
 
-  function generateStrategy() {
-    setResult(generateRecommendation(profile));
+  async function generateStrategy(profileOverride?: StudentProfile) {
+    const nextProfile = profileOverride ?? profile;
+    const baseResult = generateRecommendation(nextProfile);
+    const requestId = strategyRequestIdRef.current + 1;
+
+    strategyRequestIdRef.current = requestId;
+    setResult(baseResult);
+    setStrategyStatus("loading");
+
+    try {
+      const personalized = await personalizeResult("strategy", nextProfile, baseResult);
+
+      if (strategyRequestIdRef.current !== requestId) {
+        return;
+      }
+
+      setResult(personalized.result);
+      setStrategyStatus(personalized.usedAI ? "applied" : "fallback");
+    } catch {
+      if (strategyRequestIdRef.current !== requestId) {
+        return;
+      }
+
+      setStrategyStatus("fallback");
+    }
   }
 
-  function generateDiscovery() {
-    setDiscoveryResult(analyzeDiscoveryProfile(discoveryProfile));
+  async function generateDiscovery() {
+    const baseResult = analyzeDiscoveryProfile(discoveryProfile);
+    const requestId = discoveryRequestIdRef.current + 1;
+
+    discoveryRequestIdRef.current = requestId;
+    setDiscoveryResult(baseResult);
+    setDiscoveryStatus("loading");
+
+    try {
+      const personalized = await personalizeResult("discovery", discoveryProfile, baseResult);
+
+      if (discoveryRequestIdRef.current !== requestId) {
+        return;
+      }
+
+      setDiscoveryResult(personalized.result);
+      setDiscoveryStatus(personalized.usedAI ? "applied" : "fallback");
+    } catch {
+      if (discoveryRequestIdRef.current !== requestId) {
+        return;
+      }
+
+      setDiscoveryStatus("fallback");
+    }
   }
 
   return (
@@ -72,7 +169,10 @@ export default function Home() {
             <div className="lg:sticky lg:top-6 lg:self-start">
               <DiscoveryForm profile={discoveryProfile} setProfile={setDiscoveryProfile} onSubmit={generateDiscovery} />
             </div>
-            <DiscoveryDashboard result={discoveryResult} />
+            <div className="space-y-4">
+              {discoveryResult ? <StatusBanner status={discoveryStatus} /> : null}
+              <DiscoveryDashboard result={discoveryResult} />
+            </div>
           </div>
         ) : (
           <>
@@ -84,7 +184,10 @@ export default function Home() {
               <div className="lg:sticky lg:top-6 lg:self-start">
                 <StudentProfileForm profile={profile} setProfile={setProfile} onSubmit={generateStrategy} />
               </div>
-              <ResultDashboard result={result} />
+              <div className="space-y-4">
+                {result ? <StatusBanner status={strategyStatus} /> : null}
+                <ResultDashboard result={result} />
+              </div>
             </div>
           </>
         )}

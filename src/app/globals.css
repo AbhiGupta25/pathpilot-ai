@@ -1,8 +1,10 @@
-﻿@import "tailwindcss";
+@import "tailwindcss";
 
 :root {
   --background: #f6f8ff;
   --foreground: #07111f;
+  --font-body: "Segoe UI", Arial, Helvetica, sans-serif;
+  --font-display: "Trebuchet MS", "Segoe UI", Arial, Helvetica, sans-serif;
 }
 
 html {
